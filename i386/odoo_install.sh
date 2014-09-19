@@ -1,18 +1,19 @@
 #!/bin/bash
 ################################################################################
-# Script for Installation: ODOO Saas4/Trunk server on Ubuntu 14.04 LTS
-# Author: André Schenkels, ICTSTUDIO 2014
+# Script for Installation: ODOO 8.0 or trunk server on Debian 7
+# Author: Fabian Tribrunner, open mind consulting 2014
+# Based on AndrÃ© Schenkels, ICTSTUDIO 2014
 #-------------------------------------------------------------------------------
 #  
 # This script will install ODOO Server on
-# clean Ubuntu 14.04 Server
+# clean Debian 7 Server
 #-------------------------------------------------------------------------------
 # USAGE:
 #
-# odoo-install
+# odoo_install
 #
 # EXAMPLE:
-# ./odoo-install 
+# ./odoo_install 
 #
 ################################################################################
  
@@ -22,10 +23,10 @@ OE_USER="odoo"
 OE_HOME="/opt/$OE_USER"
 OE_HOME_EXT="/opt/$OE_USER/$OE_USER-server"
 
-#Enter version for checkout "8.0" for version 8.0, "7.0 (version 7), saas-4, saas-5 (opendays version) and "master" for trunk
+#Enter version for checkout "8.0" for version 8.0, and "master" for trunk
 OE_VERSION="8.0"
 
-#set the superadmin password
+#set the superadmin password (you can change it later)
 OE_SUPERADMIN="superadminpassword"
 OE_CONFIG="$OE_USER-server"
 
@@ -34,15 +35,15 @@ OE_CONFIG="$OE_USER-server"
 #--------------------------------------------------
 echo -e "\n---- Update Server ----"
 sudo apt-get update
-sudo apt-get upgrade -y
+sudo apt-get dist-upgrade -y
 
 #--------------------------------------------------
-# Install PostgreSQL Server
+# Install PostgreSQL Server 9.1
 #--------------------------------------------------
 echo -e "\n---- Install PostgreSQL Server ----"
 sudo apt-get install postgresql -y
 	
-echo -e "\n---- PostgreSQL $PG_VERSION Settings  ----"
+echo -e "\n---- PostgreSQL 9.1 Settings  ----"
 sudo sed -i s/"#listen_addresses = 'localhost'"/"listen_addresses = '*'"/g /etc/postgresql/9.1/main/postgresql.conf
 
 echo -e "\n---- Creating the ODOO PostgreSQL User  ----"
@@ -105,7 +106,7 @@ echo -e "* Create init file"
 echo '#!/bin/sh' >> ~/$OE_CONFIG
 echo '### BEGIN INIT INFO' >> ~/$OE_CONFIG
 echo '# Provides: $OE_CONFIG' >> ~/$OE_CONFIG
-echo '# Required-Start: $remote_fs $syslog' >> ~/$OE_CONFIG
+echo '# Required-Start: $remote_fs $syslog ' >> ~/$OE_CONFIG
 echo '# Required-Stop: $remote_fs $syslog' >> ~/$OE_CONFIG
 echo '# Should-Start: $network' >> ~/$OE_CONFIG
 echo '# Should-Stop: $network' >> ~/$OE_CONFIG
